@@ -11,19 +11,32 @@ const config = {
 
 class DBConnector{
     dbconnector = mariadb.createPool(config);
+
     async query(param) {
-        var conn = await this.dbconnector.getConnection();
-        var ret = {};
-        conn.query(param).then(data=>{
-            ret = data[0];
+        var conn = (await this.dbconnector.getConnection()).query(param);
+        //this.dbconnector.end();                 
+       /* conn.query(param).then(data=>{
+            ret = data;
             console.log(data);
-            conn.end();
+            conn.end();      
+            return ret      
         })
         .catch(err =>{
             console.error(err);
-            conn.end();
+            conn.end();     
+            return ret       
+        })*/
+        return conn;
+    }
+
+    find(param) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() =>{
+                console.log('inicio conteo');
+               const nm=this.query(param)
+                resolve(nm);
+            }, 3000);
         })
-        return ret;
     }
 }
 
