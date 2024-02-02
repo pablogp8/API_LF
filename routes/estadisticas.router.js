@@ -59,10 +59,18 @@ ORDER BY
     const prudt = await dbconnector.query(pd).catch(err=>{
         console.error(err);
     });
+    const juegos = await dbconnector.query('select j.bdid, j.equipocasa as casa, j.equipovisita as visita, j.equipoganador as ganador from juego j').catch(err=>{
+        console.error(err);
+    });
+    let np = juegos.find(({casa, visita})=> casa=== 112 && visita ===103);
+    if (np === undefined){        
+        np = juegos.find(({casa, visita})=> casa=== 103 && visita ===112);
+    }
+    console.log(np);
     for ( var i=0; i<prudt.length; i++){
         prudt[i].games = parseInt(prudt[i].wins, 10)+ parseInt(prudt[i].losses, 10)+ parseInt(prudt[i].lossesdef, 10)
     }
-    console.log(prudt);
+    //console.log(prudt);
     res.json(prudt);
 })
 
